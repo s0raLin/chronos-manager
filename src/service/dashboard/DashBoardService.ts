@@ -1,4 +1,4 @@
-import { StatsRes } from "@/src/types";
+import { DraftsRes, StatsRes } from "@/src/types";
 import axios from "axios";
 
 export async function getStats() {
@@ -8,7 +8,7 @@ export async function getStats() {
 }
 
 
-export async function getDrafts(type?: 'posts' | 'diary') {
-  const {data} = await axios.get(`/api/drafts.json?type=${type}`);
-  
+export async function getDrafts() {
+  const { data } = await axios.get<DraftsRes>(`/api/drafts.json`);
+  return data;
 }

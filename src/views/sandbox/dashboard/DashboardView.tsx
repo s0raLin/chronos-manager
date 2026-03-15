@@ -17,7 +17,8 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useEffect,useState } from 'react';
-import { getStats } from '@/src/service/dashboard/DashBoardService';
+import { getDrafts, getStats } from '@/src/service/dashboard/DashBoardService';
+import { number } from 'motion';
 
 interface Stats {
   label: string,
@@ -27,6 +28,19 @@ interface Stats {
   bg: string,
 }
 
+interface ArticleDraft {
+  id: number,
+  title: string,
+  date: string,
+  category: string,
+}
+
+interface DiaryDraft {
+  id: number,
+  content: string,
+  date: string,
+  mood: string,
+}
 export function DashboardView(){
   const [stats, setStats] = useState<Stats[]>([
     { label: '文章', value: '-', icon: FileText, color: 'text-primary', bg: 'bg-primary-container' },
@@ -37,16 +51,9 @@ export function DashboardView(){
     { label: '最后活动', value: '-', icon: Activity, color: 'text-secondary', bg: 'bg-secondary-container' },
   ]);
 
-  const articleDrafts = [
-    { id: 1, title: '深入理解量子力学', date: '2026-03-14', category: '物理' },
-    { id: 2, title: 'React 19 新特性概览', date: '2026-03-12', category: '技术' },
-    { id: 3, title: '如何写出优雅的代码', date: '2026-03-10', category: '随笔' },
-  ];
+  const [articleDrafts, setArticleDrafts] = useState<ArticleDraft[]>([]);
 
-  const diaryDrafts = [
-    { id: 1, content: '今天去看了樱花，真的很美...', date: '2026-03-15', mood: '开心' },
-    { id: 2, content: '关于未来的一些思考...', date: '2026-03-13', mood: '一般' },
-  ];
+  const [diaryDrafts, setDiaryDrafts] = useState<DiaryDraft[]>([]);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -55,15 +62,18 @@ export function DashboardView(){
     const fetchStats = async () => {
       try {
         setLoading(true);
-        const result = await getStats();
+        const statsRes = await getStats();
+        const DraftsRes = await getDrafts();
         setStats([
-          { label: '文章', value: result.postCount, icon: FileText, color: 'text-primary', bg: 'bg-primary-container' },
-          { label: '分类', value: result.categoryCount, icon: Folder, color: 'text-secondary', bg: 'bg-secondary-container' },
-          { label: '标签', value: result.tagCount, icon: Tag, color: 'text-primary', bg: 'bg-primary-container' },
-          { label: '总字数', value: result.totalWords, icon: Type, color: 'text-secondary', bg: 'bg-secondary-container' },
-          { label: '运行天数', value: result.runningDays, icon: Timer, color: 'text-primary', bg: 'bg-primary-container' },
-          { label: '最后活动', value: result.lastActivityDaysAgo, icon: Activity, color: 'text-secondary', bg: 'bg-secondary-container' },
+          { label: '文章', value: statsRes.postCount, icon: FileText, color: 'text-primary', bg: 'bg-primary-container' },
+          { label: '分类', value: statsRes.categoryCount, icon: Folder, color: 'text-secondary', bg: 'bg-secondary-container' },
+          { label: '标签', value: statsRes.tagCount, icon: Tag, color: 'text-primary', bg: 'bg-primary-container' },
+          { label: '总字数', value: statsRes.totalWords, icon: Type, color: 'text-secondary', bg: 'bg-secondary-container' },
+          { label: '运行天数', value: statsRes.runningDays, icon: Timer, color: 'text-primary', bg: 'bg-primary-container' },
+          { label: '最后活动', value: statsRes.lastActivityDaysAgo, icon: Activity, color: 'text-secondary', bg: 'bg-secondary-container' },
         ]);
+        setArticleDrafts(DraftsRes["posts"].items);
+        setDiaryDrafts(DraftsRes["diary"].items);
       } catch (err) {
         console.error('获取统计数据失败:', err);
         setError('加载失败');
@@ -133,7 +143,7 @@ export function DashboardView(){
                     <span className="text-[9px] font-black px-2 py-1 bg-primary-container text-on-primary-container rounded-full uppercase tracking-widest">草稿</span>
                   </div>
                   <div className="flex items-center gap-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
-                    <span className="flex items-center gap-1"><Calendar size={12} /> {draft.date}</span>
+                    <span className="flex items-center gap-1"><Calendar size={12} /> {draft.updated}</span>
                     <span className="flex items-center gap-1"><Zap size={12} /> {draft.category}</span>
                   </div>
                 </div>
@@ -160,10 +170,10 @@ export function DashboardView(){
               {diaryDrafts.map(draft => (
                 <div key={draft.id} className="material-card p-5 group cursor-pointer hover:bg-secondary/5 transition-colors border-l-4 border-l-secondary">
                   <p className="text-sm text-on-surface-variant line-clamp-2 mb-3 leading-relaxed">
-                    {draft.content}
+                    {draft.title}
                   </p>
                   <div className="flex items-center gap-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
-                    <span className="flex items-center gap-1"><Clock size={12} /> {draft.date}</span>
+                    <span className="flex items-center gap-1"><Clock size={12} /> {draft.updated}</span>
                     <span className="flex items-center gap-1"><Zap size={12} /> 心情: {draft.mood}</span>
                   </div>
                 </div>

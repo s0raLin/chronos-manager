@@ -67,7 +67,31 @@ export interface StatsRes {
   lastActivityDaysAgo: string
 }
 
+export interface DraftItem {
+  id: string;
+  filename: string;
+  title: string;
+  created: string;
+  updated: string;
+  category?: string;  // 文章特有
+  mood?: string;      // 日记特有
+  tags: string;       // JSON 字符串
+  body: string;
+  wordCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
 
+export interface DraftsRes {
+  posts: {
+    count: number,
+    items: DraftItem,
+  },
+  diary: {
+    count: number,
+    items: DraftItem,
+  },
+}
 
 // }{
 //   "postCount": 19,
