@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { TopBar } from './components/TopBar';
-import { TimelineView } from './views/TimelineView';
-import { DiaryView } from './views/DiaryView';
-import { AlbumsView } from './views/AlbumsView';
-import { CMSView } from './views/CMSView';
-import { DashboardView } from './views/DashboardView';
-import { ProjectsView } from './views/ProjectsView';
-import { SkillsView } from './views/SkillsView';
-import { FriendsView } from './views/FriendsView';
-import { EquipmentView } from './views/EquipmentView';
-import { AboutView } from './views/AboutView';
+
 import { ViewType } from './types';
 import { motion, AnimatePresence } from 'motion/react';
+import { DashboardView } from './views/dashboard/DashboardView';
+import { TimelineView } from './views/timeline/TimelineView';
+import { DiaryView } from './views/diary/DiaryView';
+import { AlbumsView } from './views/albums/AlbumsView';
+import { CMSView } from './views/cms/CMSView';
+import { ProjectsView } from './views/projects/ProjectsView';
+import { SkillsView } from './views/skills/SkillsView';
+import { FriendsView } from './views/friends/FriendsView';
+import { EquipmentView } from './views/equipment/EquipmentView';
+import { AboutView } from './views/about/AboutView';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<ViewType>('dashboard');
