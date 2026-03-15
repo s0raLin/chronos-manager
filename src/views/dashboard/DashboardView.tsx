@@ -16,7 +16,6 @@ import {
   Timer,
   Activity
 } from 'lucide-react';
-import '../dashboard/DashboardView.scss';
 
 export const DashboardView: React.FC = () => {
   const stats = [

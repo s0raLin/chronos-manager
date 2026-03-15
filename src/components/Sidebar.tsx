@@ -13,6 +13,7 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { ViewType } from '../types';
+import { mainRoutes, secondaryRoutes } from '../routes';
 
 interface SidebarProps {
   currentView: ViewType;
@@ -22,21 +23,9 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange }) => {
   const [isExpanded, setIsExpanded] = useState(true);
 
-  const navItems = [
-    { id: 'dashboard', label: '仪表盘', icon: LayoutDashboard },
-    { id: 'cms', label: '文章管理', icon: PenTool },
-    { id: 'diary', label: '日记管理', icon: BookOpen },
-    { id: 'albums', label: '专辑管理', icon: ImageIcon },
-    { id: 'timeline', label: '时间线', icon: Calendar },
-    { id: 'projects', label: '项目经历', icon: LayoutDashboard },
-  ];
+  const navItems = mainRoutes;
 
-  const secondaryItems = [
-    { id: 'skills', label: '技能管理', icon: Tag },
-    { id: 'friends', label: '友链管理', icon: Users },
-    { id: 'equipment', label: '设备管理', icon: LayoutDashboard },
-    { id: 'about', label: '关于页面', icon: MessageSquare },
-  ];
+  const secondaryItems = secondaryRoutes;
 
   return (
     <aside className={`${isExpanded ? 'w-64' : 'w-20'} flex-shrink-0 bg-surface-variant/20 border-r border-outline/10 flex flex-col h-full transition-all duration-300 relative group`}>

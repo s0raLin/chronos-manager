@@ -6,10 +6,10 @@ import {
   Calendar,
   Users,
   Tag,
-  MessageSquare
+  MessageSquare,
+  LucideIcon
 } from 'lucide-react';
 import { ViewType } from './types';
-import { ReactNode } from 'react';
 
 /**
  * 路由配置类型
@@ -19,8 +19,8 @@ export interface RouteConfig {
   path: string;
   label: string;
   subtitle: string;
-  icon: ReactNode;
-  selectedIcon: ReactNode;
+  icon: LucideIcon;
+  selectedIcon: LucideIcon;
   group: 'main' | 'secondary';
 }
 
@@ -35,8 +35,8 @@ export const routes: RouteConfig[] = [
     path: '/dashboard',
     label: '仪表盘',
     subtitle: '欢迎回来，今天想做点什么？',
-    icon: <LayoutDashboard size={20} />,
-    selectedIcon: <LayoutDashboard size={20} />,
+    icon: LayoutDashboard,
+    selectedIcon: LayoutDashboard,
     group: 'main',
   },
   {
@@ -44,8 +44,8 @@ export const routes: RouteConfig[] = [
     path: '/cms',
     label: '文章管理',
     subtitle: '撰写并发布您的精彩博文',
-    icon: <PenTool size={20} />,
-    selectedIcon: <PenTool size={20} />,
+    icon: PenTool,
+    selectedIcon: PenTool,
     group: 'main',
   },
   {
@@ -53,8 +53,8 @@ export const routes: RouteConfig[] = [
     path: '/diary',
     label: '日记管理',
     subtitle: '记录生活中的点点滴滴',
-    icon: <BookOpen size={20} />,
-    selectedIcon: <BookOpen size={20} />,
+    icon: BookOpen,
+    selectedIcon: BookOpen,
     group: 'main',
   },
   {
@@ -62,8 +62,8 @@ export const routes: RouteConfig[] = [
     path: '/albums',
     label: '专辑管理',
     subtitle: '管理您的摄影期刊与相册',
-    icon: <ImageIcon size={20} />,
-    selectedIcon: <ImageIcon size={20} />,
+    icon: ImageIcon,
+    selectedIcon: ImageIcon,
     group: 'main',
   },
   {
@@ -71,8 +71,8 @@ export const routes: RouteConfig[] = [
     path: '/timeline',
     label: '时间线',
     subtitle: '回顾您的成长历程',
-    icon: <Calendar size={20} />,
-    selectedIcon: <Calendar size={20} />,
+    icon: Calendar,
+    selectedIcon: Calendar,
     group: 'main',
   },
   {
@@ -80,8 +80,8 @@ export const routes: RouteConfig[] = [
     path: '/projects',
     label: '项目经历',
     subtitle: '展示您的技术实力与作品',
-    icon: <LayoutDashboard size={20} />,
-    selectedIcon: <LayoutDashboard size={20} />,
+    icon: LayoutDashboard,
+    selectedIcon: LayoutDashboard,
     group: 'main',
   },
   // 次要导航
@@ -90,8 +90,8 @@ export const routes: RouteConfig[] = [
     path: '/skills',
     label: '技能管理',
     subtitle: '管理您的专业技能树',
-    icon: <Tag size={20} />,
-    selectedIcon: <Tag size={20} />,
+    icon: Tag,
+    selectedIcon: Tag,
     group: 'secondary',
   },
   {
@@ -99,8 +99,8 @@ export const routes: RouteConfig[] = [
     path: '/friends',
     label: '友链管理',
     subtitle: '维护您的社交网络',
-    icon: <Users size={20} />,
-    selectedIcon: <Users size={20} />,
+    icon: Users,
+    selectedIcon: Users,
     group: 'secondary',
   },
   {
@@ -108,8 +108,8 @@ export const routes: RouteConfig[] = [
     path: '/equipment',
     label: '设备管理',
     subtitle: '罗列您的生产力工具',
-    icon: <LayoutDashboard size={20} />,
-    selectedIcon: <LayoutDashboard size={20} />,
+    icon: LayoutDashboard,
+    selectedIcon: LayoutDashboard,
     group: 'secondary',
   },
   {
@@ -117,8 +117,8 @@ export const routes: RouteConfig[] = [
     path: '/about',
     label: '关于页面',
     subtitle: '向世界介绍您自己',
-    icon: <MessageSquare size={20} />,
-    selectedIcon: <MessageSquare size={20} />,
+    icon: MessageSquare,
+    selectedIcon: MessageSquare,
     group: 'secondary',
   },
 ];
