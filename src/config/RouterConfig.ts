@@ -1,4 +1,4 @@
-import { BookOpen, Calendar, ImageIcon, LayoutDashboard, MessageSquare, PenTool, Tag, Users } from "lucide-react";
+import { BookOpen, Calendar, ImageIcon, LayoutDashboard, MessageSquare, PenTool, Tag, Users, FileArchive } from "lucide-react";
 import { RouteConfig } from "../types";
 
 
@@ -97,6 +97,15 @@ export const routes: RouteConfig[] = [
     subtitle: '向世界介绍您自己',
     icon: MessageSquare,
     selectedIcon: MessageSquare,
+    group: 'secondary',
+  },
+  {
+    id: 'drafts',
+    path: '/drafts',
+    label: '草稿箱',
+    subtitle: '管理您的文章和日记草稿',
+    icon: FileArchive,
+    selectedIcon: FileArchive,
     group: 'secondary',
   },
 ];

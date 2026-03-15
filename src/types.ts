@@ -10,7 +10,8 @@ export type ViewType =
   | 'skills' 
   | 'friends' 
   | 'equipment' 
-  | 'about';
+  | 'about'
+  | 'drafts';
 
 export interface TimelineEvent {
   id: string;

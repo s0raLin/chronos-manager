@@ -10,6 +10,7 @@ import { SkillsView } from "../views/sandbox/skills/SkillsView";
 import { FriendsView } from "../views/sandbox/friends/FriendsView";
 import { AboutView } from "../views/sandbox/about/AboutView";
 import { EquipmentView } from "../views/sandbox/equipment/EquipmentView";
+import { DraftsView } from "../views/sandbox/drafts/DraftsView";
 
 import { routes } from "@/src/config/RouterConfig";
 import NoPermission from "../views/no-permission/NoPermission";
@@ -60,6 +61,7 @@ export default function MainContent() {
         <Route path="/friends" element={<FriendsView />} />
         <Route path="/equipment" element={<EquipmentView />} />
         <Route path="/about" element={<AboutView />} />
+        <Route path="/drafts" element={<DraftsView />} />
 
         {/* 404 重定向到 dashboard */}
         <Route path="*" element={<NoPermission />} />
