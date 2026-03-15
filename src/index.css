@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: var(--md-sys-color-primary);
+  --color-on-primary: var(--md-sys-color-on-primary);
+  --color-primary-container: var(--md-sys-color-primary-container);
+  --color-on-primary-container: var(--md-sys-color-on-primary-container);
+  
+  --color-secondary: var(--md-sys-color-secondary);
+  --color-on-secondary: var(--md-sys-color-on-secondary);
+  --color-secondary-container: var(--md-sys-color-secondary-container);
+  --color-on-secondary-container: var(--md-sys-color-on-secondary-container);
+  
+  --color-surface: var(--md-sys-color-surface);
+  --color-on-surface: var(--md-sys-color-on-surface);
+  --color-surface-variant: var(--md-sys-color-surface-variant);
+  --color-on-surface-variant: var(--md-sys-color-on-surface-variant);
+  
+  --color-outline: var(--md-sys-color-outline);
+  
+  --font-display: "Inter", sans-serif;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  --radius-3xl: 3rem;
+}
+
+@layer base {
+  :root {
+    /* Light Mode - 深色文字 */
+    --md-sys-color-primary: hsl(35, 90%, 45%);
+    --md-sys-color-on-primary: hsl(35, 90%, 100%);
+    --md-sys-color-primary-container: hsl(35, 90%, 85%);
+    --md-sys-color-on-primary-container: hsl(35, 90%, 15%);
+    
+    --md-sys-color-secondary: hsl(35, 25%, 45%);
+    --md-sys-color-on-secondary: hsl(35, 25%, 100%);
+    --md-sys-color-secondary-container: hsl(35, 25%, 85%);
+    --md-sys-color-on-secondary-container: hsl(35, 25%, 15%);
+    
+    --md-sys-color-surface: hsl(35, 10%, 98%);
+    --md-sys-color-on-surface: hsl(35, 10%, 10%);
+    --md-sys-color-surface-variant: hsl(35, 8%, 92%);
+    --md-sys-color-on-surface-variant: hsl(35, 10%, 35%);
+    
+    --md-sys-color-outline: hsl(35, 8%, 40%);
+  }
+
+  .dark {
+    /* Dark Mode - 浅色文字 */
+    --md-sys-color-primary: hsl(35, 90%, 70%);
+    --md-sys-color-on-primary: hsl(35, 90%, 15%);
+    --md-sys-color-primary-container: hsl(35, 90%, 25%);
+    --md-sys-color-on-primary-container: hsl(35, 90%, 95%);
+    
+    --md-sys-color-secondary: hsl(35, 25%, 70%);
+    --md-sys-color-on-secondary: hsl(35, 25%, 15%);
+    --md-sys-color-secondary-container: hsl(35, 25%, 25%);
+    --md-sys-color-on-secondary-container: hsl(35, 25%, 95%);
+    
+    --md-sys-color-surface: hsl(35, 5%, 8%);
+    --md-sys-color-on-surface: hsl(35, 5%, 95%);
+    --md-sys-color-surface-variant: hsl(35, 5%, 15%);
+    --md-sys-color-on-surface-variant: hsl(35, 5%, 75%);
+    
+    --md-sys-color-outline: hsl(35, 5%, 40%);
+  }
+
+  body {
+    @apply bg-surface text-on-surface antialiased font-display transition-colors duration-300;
+  }
+}
+
+@layer components {
+  .material-card {
+    @apply bg-surface-variant/30 border border-outline/10 rounded-3xl p-6 transition-all hover:bg-surface-variant/50;
+  }
+  
+  .material-card-elevated {
+    @apply bg-surface shadow-md rounded-3xl p-6 transition-all hover:shadow-lg;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-on-primary px-6 py-3 rounded-full font-medium hover:shadow-lg transition-all active:scale-95 flex items-center gap-2;
+  }
+  
+  .btn-tonal {
+    @apply bg-primary-container text-on-primary-container px-6 py-3 rounded-full font-medium hover:shadow-md transition-all active:scale-95 flex items-center gap-2;
+  }
+  
+  .btn-outline {
+    @apply border border-outline text-primary px-6 py-3 rounded-full font-medium hover:bg-primary/5 transition-all active:scale-95 flex items-center gap-2;
+  }
+
+  /* 统一的搜索框样式 - 增强对比度 */
+  .search-input {
+    @apply w-full pl-12 pr-4 py-3 bg-surface-variant border-none rounded-2xl shadow-sm focus:ring-2 focus:ring-primary/20 outline-none font-medium text-on-surface placeholder:text-on-surface-variant/50;
+  }
+
+  /* 统一的表单输入框样式 - 增强对比度 */
+  .form-input {
+    @apply w-full bg-surface-variant border-none rounded-xl p-4 font-bold outline-none focus:ring-2 focus:ring-primary/40 text-on-surface placeholder:text-on-surface-variant/50;
+  }
+
+  /* 统一的表单输入框样式 (小号) */
+  .form-input-sm {
+    @apply w-full bg-surface-variant border-none rounded-xl p-3 font-bold text-sm outline-none focus:ring-2 focus:ring-primary/40 text-on-surface placeholder:text-on-surface-variant/50;
+  }
+
+  /* 统一的表单输入框样式 (超大号) */
+  .form-input-lg {
+    @apply w-full bg-surface-variant border-none rounded-2xl p-6 focus:ring-2 focus:ring-primary/40 outline-none font-medium text-lg leading-relaxed text-on-surface placeholder:text-on-surface-variant/50;
+  }
+
+  /* 统一的文本域样式 */
+  .form-textarea {
+    @apply w-full bg-surface-variant border-none rounded-xl p-4 font-medium text-sm outline-none focus:ring-2 focus:ring-primary/40 min-h-[100px] text-on-surface placeholder:text-on-surface-variant/50;
+  }
+
+  /* 统一的下拉框样式 */
+  .form-select {
+    @apply w-full bg-surface-variant border-none rounded-xl p-3 font-bold text-sm outline-none focus:ring-2 focus:ring-primary/40 appearance-none text-on-surface;
+  }
+
+  /* 标签样式 */
+  .form-label {
+    @apply text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1;
+  }
+}
