@@ -14,7 +14,7 @@ interface TimelineEvent {
   icon: any;
 }
 
-export const TimelineView: React.FC = () => {
+export function TimelineView(){
   const [mode, setMode] = useState<'list' | 'edit' | 'add'>('list');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentEvent, setCurrentEvent] = useState<Partial<TimelineEvent>>({});

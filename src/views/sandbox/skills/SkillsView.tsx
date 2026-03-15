@@ -15,7 +15,7 @@ interface Skill {
   color: string; // Hex color
 }
 
-export const SkillsView: React.FC = () => {
+export function SkillsView(){
   const [mode, setMode] = useState<'list' | 'edit' | 'add'>('list');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentSkill, setCurrentSkill] = useState<Partial<Skill>>({});

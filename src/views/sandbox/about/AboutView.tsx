@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MessageSquare, Save, Eye, Edit3, User, Globe, Mail, Github, Twitter } from 'lucide-react';
 
-export const AboutView: React.FC = () => {
+export function AboutView(){
   const [content, setContent] = useState('你好！我是一名热爱技术的开发者。');
   const [isPreview, setIsPreview] = useState(false);
 

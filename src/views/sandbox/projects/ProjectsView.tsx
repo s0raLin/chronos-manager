@@ -39,7 +39,7 @@ interface Project {
   pinned: boolean;
 }
 
-export const ProjectsView: React.FC = () => {
+export function ProjectsView(){
   const [mode, setMode] = useState<'list' | 'edit' | 'add'>('list');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentProject, setCurrentProject] = useState<Partial<Project>>({});

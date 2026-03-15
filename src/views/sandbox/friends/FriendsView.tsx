@@ -10,7 +10,7 @@ interface Friend {
   tags: string[];
 }
 
-export const FriendsView: React.FC = () => {
+export function FriendsView(){
   const [mode, setMode] = useState<'list' | 'edit' | 'add'>('list');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentFriend, setCurrentFriend] = useState<Partial<Friend>>({});

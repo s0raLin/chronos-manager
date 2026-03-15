@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Palette, Moon, Sun, X } from 'lucide-react';
 
-interface TopBarProps {
-  title: string;
-  subtitle?: string;
-}
 
-export const TopBar: React.FC<TopBarProps> = ({ title, subtitle }) => {
+
+export function TopBar({ title, subtitle })  {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const [hue, setHue] = useState(35);
   const [isDark, setIsDark] = useState(false);

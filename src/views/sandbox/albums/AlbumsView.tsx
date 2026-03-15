@@ -38,7 +38,7 @@ interface Album {
   images: AlbumImage[];
 }
 
-export const AlbumsView: React.FC = () => {
+export function AlbumsView(){
   const [mode, setMode] = useState<'list' | 'edit' | 'add'>('list');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentAlbum, setCurrentAlbum] = useState<Partial<Album>>({});

@@ -2,27 +2,21 @@ import React, { useState } from 'react';
 import { 
   Edit3, 
   Calendar, 
-  ChevronDown, 
   Plus, 
   X, 
   Eye,
-  CheckCircle2,
   Image as ImageIcon,
-  Type,
-  Hash,
   MessageSquare,
   Pin,
   FileText,
   Languages,
-  Layout,
   EyeOff,
   Search,
-  MoreVertical,
   Trash2,
   ArrowLeft
 } from 'lucide-react';
 
-export const CMSView: React.FC = () => {
+export function CMSView(){
   const [mode, setMode] = useState<'list' | 'edit' | 'add'>('list');
   const [isPreview, setIsPreview] = useState(false);
   const [content, setContent] = useState('');

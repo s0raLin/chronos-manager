@@ -1,28 +1,6 @@
-import { 
-  PenTool, 
-  BookOpen, 
-  LayoutDashboard, 
-  Image as ImageIcon, 
-  Calendar,
-  Users,
-  Tag,
-  MessageSquare,
-  LucideIcon
-} from 'lucide-react';
-import { ViewType } from './types';
+import { BookOpen, Calendar, ImageIcon, LayoutDashboard, MessageSquare, PenTool, Tag, Users } from "lucide-react";
+import { RouteConfig } from "../types";
 
-/**
- * 路由配置类型
- */
-export interface RouteConfig {
-  id: ViewType;
-  path: string;
-  label: string;
-  subtitle: string;
-  icon: LucideIcon;
-  selectedIcon: LucideIcon;
-  group: 'main' | 'secondary';
-}
 
 /**
  * 统一路由配置
@@ -123,6 +101,8 @@ export const routes: RouteConfig[] = [
   },
 ];
 
+
+
 /**
  * 获取主导航路由
  */
@@ -132,26 +112,3 @@ export const mainRoutes = routes.filter(route => route.group === 'main');
  * 获取次要导航路由
  */
 export const secondaryRoutes = routes.filter(route => route.group === 'secondary');
-
-/**
- * 根据id获取路由配置
- */
-export const getRouteById = (id: ViewType): RouteConfig | undefined => {
-  return routes.find(route => route.id === id);
-};
-
-/**
- * 根据id获取路由标题
- */
-export const getRouteTitle = (id: ViewType): string => {
-  const route = getRouteById(id);
-  return route?.label ?? '博客后台';
-};
-
-/**
- * 根据id获取路由副标题
- */
-export const getRouteSubtitle = (id: ViewType): string => {
-  const route = getRouteById(id);
-  return route?.subtitle ?? '欢迎回来，管理员';
-};

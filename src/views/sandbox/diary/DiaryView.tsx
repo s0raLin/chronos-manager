@@ -21,7 +21,7 @@ import {
   MoreVertical
 } from 'lucide-react';
 
-export const DiaryView: React.FC = () => {
+export function DiaryView(){
   const [mode, setMode] = useState<'list' | 'edit' | 'add'>('list');
   const [content, setContent] = useState('');
   const [mood, setMood] = useState('satisfied');

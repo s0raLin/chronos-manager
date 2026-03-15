@@ -12,7 +12,7 @@ interface Equipment {
   link?: string;
 }
 
-export const EquipmentView: React.FC = () => {
+export function EquipmentView(){
   const [mode, setMode] = useState<'list' | 'edit' | 'add'>('list');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentEquipment, setCurrentEquipment] = useState<Partial<Equipment>>({});

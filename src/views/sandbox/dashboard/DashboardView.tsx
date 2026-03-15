@@ -7,25 +7,35 @@ import {
   PenTool,
   Calendar,
   Zap,
-  TrendingUp,
-  Users,
   Image as ImageIcon,
   Folder,
   Tag,
   Type,
   Timer,
-  Activity
+  Activity,
+  LucideIcon
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useEffect,useState } from 'react';
+import { getStats } from '@/src/service/dashboard/DashBoardService';
 
-export const DashboardView: React.FC = () => {
-  const stats = [
-    { label: '文章', value: '12', icon: FileText, color: 'text-primary', bg: 'bg-primary-container' },
-    { label: '分类', value: '8', icon: Folder, color: 'text-secondary', bg: 'bg-secondary-container' },
-    { label: '标签', value: '24', icon: Tag, color: 'text-primary', bg: 'bg-primary-container' },
-    { label: '总字数', value: '45.2k', icon: Type, color: 'text-secondary', bg: 'bg-secondary-container' },
-    { label: '运行天数', value: '156天', icon: Timer, color: 'text-primary', bg: 'bg-primary-container' },
-    { label: '最后活动', value: '0天前', icon: Activity, color: 'text-secondary', bg: 'bg-secondary-container' },
-  ];
+interface Stats {
+  label: string,
+  value: string,
+  icon: LucideIcon,
+  color: string,
+  bg: string,
+}
+
+export function DashboardView(){
+  const [stats, setStats] = useState<Stats[]>([
+    { label: '文章', value: '-', icon: FileText, color: 'text-primary', bg: 'bg-primary-container' },
+    { label: '分类', value: '-', icon: Folder, color: 'text-secondary', bg: 'bg-secondary-container' },
+    { label: '标签', value: '-', icon: Tag, color: 'text-primary', bg: 'bg-primary-container' },
+    { label: '总字数', value: '-', icon: Type, color: 'text-secondary', bg: 'bg-secondary-container' },
+    { label: '运行天数', value: '-', icon: Timer, color: 'text-primary', bg: 'bg-primary-container' },
+    { label: '最后活动', value: '-', icon: Activity, color: 'text-secondary', bg: 'bg-secondary-container' },
+  ]);
 
   const articleDrafts = [
     { id: 1, title: '深入理解量子力学', date: '2026-03-14', category: '物理' },
@@ -38,22 +48,65 @@ export const DashboardView: React.FC = () => {
     { id: 2, content: '关于未来的一些思考...', date: '2026-03-13', mood: '一般' },
   ];
 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        setLoading(true);
+        const result = await getStats();
+        setStats([
+          { label: '文章', value: result.postCount, icon: FileText, color: 'text-primary', bg: 'bg-primary-container' },
+          { label: '分类', value: result.categoryCount, icon: Folder, color: 'text-secondary', bg: 'bg-secondary-container' },
+          { label: '标签', value: result.tagCount, icon: Tag, color: 'text-primary', bg: 'bg-primary-container' },
+          { label: '总字数', value: result.totalWords, icon: Type, color: 'text-secondary', bg: 'bg-secondary-container' },
+          { label: '运行天数', value: result.runningDays, icon: Timer, color: 'text-primary', bg: 'bg-primary-container' },
+          { label: '最后活动', value: result.lastActivityDaysAgo, icon: Activity, color: 'text-secondary', bg: 'bg-secondary-container' },
+        ]);
+      } catch (err) {
+        console.error('获取统计数据失败:', err);
+        setError('加载失败');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
+  }, [])
+  
+
+  const navigate = useNavigate();
+  
+  const handleArticleClick = () => navigate("/article");
+  const handleDiaryClick = ()=> navigate("/diary");
+  
+
   return (
     <div className="flex-1 overflow-y-auto p-8 lg:px-24">
       <div className="max-w-6xl mx-auto space-y-10">
         {/* Stats Grid - 站点统计 */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {stats.map((stat, idx) => (
-            <div key={idx} className="material-card p-4 flex items-center gap-3 group hover:scale-[1.02] transition-transform cursor-pointer">
-              <div className={`size-10 rounded-xl ${stat.bg} ${stat.color} flex items-center justify-center`}>
-                <stat.icon size={20} />
-              </div>
-              <div>
-                <p className="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">{stat.label}</p>
-                <p className="text-xl font-black text-on-surface">{stat.value}</p>
-              </div>
+          {loading ? (
+            <div className="col-span-full flex items-center justify-center py-8">
+              <div className="animate-pulse text-on-surface-variant">加载中...</div>
             </div>
-          ))}
+          ) : error ? (
+            <div className="col-span-full flex items-center justify-center py-8">
+              <div className="text-red-500">{error}</div>
+            </div>
+          ) : (
+            stats.map((stat, idx) => (
+              <div key={idx} className="material-card p-4 flex items-center gap-3 group hover:scale-[1.02] transition-transform cursor-pointer">
+                <div className={`size-10 rounded-xl ${stat.bg} ${stat.color} flex items-center justify-center`}>
+                  <stat.icon size={20} />
+                </div>
+                <div>
+                  <p className="text-[9px] font-black text-on-surface-variant uppercase tracking-widest">{stat.label}</p>
+                  <p className="text-xl font-black text-on-surface">{stat.value}</p>
+                </div>
+              </div>
+            ))
+          )}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
@@ -64,7 +117,10 @@ export const DashboardView: React.FC = () => {
                 <PenTool className="text-primary" size={24} />
                 文章草稿箱
               </h3>
-              <button className="text-xs font-black text-primary uppercase tracking-widest flex items-center gap-1 hover:gap-2 transition-all">
+              <button 
+                className="text-xs font-black text-primary uppercase tracking-widest flex items-center gap-1 hover:gap-2 transition-all" 
+                onClick={handleArticleClick}
+              >
                 查看全部 <ChevronRight size={14} />
               </button>
             </div>
@@ -92,7 +148,10 @@ export const DashboardView: React.FC = () => {
                 <BookOpen className="text-secondary" size={24} />
                 日记草稿箱
               </h3>
-              <button className="text-xs font-black text-secondary uppercase tracking-widest flex items-center gap-1 hover:gap-2 transition-all">
+              <button 
+                className="text-xs font-black text-secondary uppercase tracking-widest flex items-center gap-1 hover:gap-2 transition-all"
+                onClick={handleDiaryClick}
+              >
                 查看全部 <ChevronRight size={14} />
               </button>
             </div>

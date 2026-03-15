@@ -1,30 +1,14 @@
 import React, { useState } from 'react';
 import { 
-  PenTool, 
-  BookOpen, 
-  LayoutDashboard, 
-  Image as ImageIcon, 
-  Settings,
-  Calendar,
-  Users,
-  Tag,
-  MessageSquare,
   ChevronLeft,
-  ChevronRight
-} from 'lucide-react';
-import { ViewType } from '../types';
-import { mainRoutes, secondaryRoutes } from '../routes';
+  ChevronRight} from 'lucide-react';
+import { NavLink } from 'react-router-dom';
+import { mainRoutes, secondaryRoutes } from '../config/RouterConfig';
 
-interface SidebarProps {
-  currentView: ViewType;
-  onViewChange: (view: ViewType) => void;
-}
-
-export const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange }) => {
+export function Sidebar() {
   const [isExpanded, setIsExpanded] = useState(true);
 
   const navItems = mainRoutes;
-
   const secondaryItems = secondaryRoutes;
 
   return (
@@ -38,19 +22,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange }) =
 
       <nav className="pt-8 flex-1 px-4 space-y-2 overflow-hidden">
         {navItems.map((item) => (
-          <button
+          <NavLink
             key={item.id}
-            onClick={() => onViewChange(item.id as ViewType)}
+            to={item.path}
             title={!isExpanded ? item.label : ''}
-            className={`w-full flex items-center gap-4 px-3 py-3 rounded-full transition-all ${
-              currentView === item.id 
-                ? 'bg-primary-container text-on-primary-container shadow-sm' 
-                : 'hover:bg-primary/10 text-on-surface-variant'
-            }`}
+            className={({ isActive }) =>
+              `w-full flex items-center gap-4 px-3 py-3 rounded-full transition-all ${
+                isActive 
+                  ? 'bg-primary-container text-on-primary-container shadow-sm' 
+                  : 'hover:bg-primary/10 text-on-surface-variant'
+              }`
+            }
           >
             <item.icon size={20} className="flex-shrink-0" />
             {isExpanded && <span className="font-medium truncate animate-in fade-in slide-in-from-left-2">{item.label}</span>}
-          </button>
+          </NavLink>
         ))}
         
         <div className="py-4">
@@ -58,19 +44,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, onViewChange }) =
         </div>
 
         {secondaryItems.map((item) => (
-          <button
+          <NavLink
             key={item.id}
-            onClick={() => onViewChange(item.id as ViewType)}
+            to={item.path}
             title={!isExpanded ? item.label : ''}
-            className={`w-full flex items-center gap-4 px-3 py-3 rounded-full transition-all ${
-              currentView === item.id 
-                ? 'bg-primary-container text-on-primary-container shadow-sm' 
-                : 'hover:bg-primary/10 text-on-surface-variant'
-            }`}
+            className={({ isActive }) =>
+              `w-full flex items-center gap-4 px-3 py-3 rounded-full transition-all ${
+                isActive 
+                  ? 'bg-primary-container text-on-primary-container shadow-sm' 
+                  : 'hover:bg-primary/10 text-on-surface-variant'
+              }`
+            }
           >
             <item.icon size={20} className="flex-shrink-0" />
             {isExpanded && <span className="font-medium truncate animate-in fade-in slide-in-from-left-2">{item.label}</span>}
-          </button>
+          </NavLink>
         ))}
       </nav>
 
