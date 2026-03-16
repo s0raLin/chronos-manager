@@ -109,7 +109,7 @@ export function DraftsView() {
     setCategory(item.category || "");
     setMood(item.mood || "");
     try {
-      setTags(JSON.parse(item.tags || "[]"));
+      setTags(tags);
     } catch {
       setTags([]);
     }
@@ -138,7 +138,7 @@ export function DraftsView() {
       updated: new Date().toISOString().split("T")[0],
       category: draftType === "posts" ? category : undefined,
       mood: draftType === "diary" ? mood : undefined,
-      tags: JSON.stringify(tags),
+      tags: tags,
       body: content,
       wordCount: content.length,
       createdAt: editingItem?.createdAt || new Date().toISOString(),
@@ -202,7 +202,7 @@ export function DraftsView() {
       updated: new Date().toISOString().split("T")[0],
       category: draftType === "posts" ? category : undefined,
       mood: draftType === "diary" ? mood : undefined,
-      tags: JSON.stringify(tags),
+      tags: tags,
       body: content,
       wordCount: content.length,
       createdAt: editingItem?.createdAt || new Date().toISOString(),

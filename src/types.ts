@@ -76,12 +76,15 @@ export interface DraftItem {
   updated: string;
   category?: string;  // 文章特有
   mood?: string;      // 日记特有
-  tags: string;       // JSON 字符串
+  tags: string[];       // JSON 字符串
+  description?: string, 
   body: string;
   wordCount: number;
   createdAt: string;
   updatedAt: string;
 }
+
+
 
 export interface DraftsRes {
   posts: {
