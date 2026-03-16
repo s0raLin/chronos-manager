@@ -62,6 +62,7 @@ export default function MainContent() {
         <Route path="/equipment" element={<EquipmentView />} />
         <Route path="/about" element={<AboutView />} />
         <Route path="/drafts" element={<DraftsView />} />
+        <Route path="/drafts" element={<DraftsView />} />
 
         {/* 404 重定向到 dashboard */}
         <Route path="*" element={<NoPermission />} />

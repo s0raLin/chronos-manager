@@ -87,10 +87,14 @@ export function DashboardView(){
 
   const navigate = useNavigate();
   
-  const handleArticleClick = () => navigate("/article");
-  const handleDiaryClick = ()=> navigate("/diary");
+  const handleArticleClick = () => navigate("/drafts?tab=posts");
+  const handleDiaryClick = ()=> navigate("/drafts?tab=diary");
   
 
+  const onArticleDraftClick = () => {
+    
+  };
+  const onDiaryDraftClick = () => {};
   return (
     <div className="flex-1 overflow-y-auto p-8 lg:px-24">
       <div className="max-w-6xl mx-auto space-y-10">
@@ -136,18 +140,29 @@ export function DashboardView(){
             </div>
             
             <div className="space-y-4">
-              {articleDrafts.map(draft => (
-                <div key={draft.id} className="material-card p-5 group cursor-pointer hover:bg-primary/5 transition-colors border-l-4 border-l-primary">
-                  <div className="flex justify-between items-start mb-2">
-                    <h4 className="font-bold text-on-surface group-hover:text-primary transition-colors">{draft.title}</h4>
-                    <span className="text-[9px] font-black px-2 py-1 bg-primary-container text-on-primary-container rounded-full uppercase tracking-widest">草稿</span>
-                  </div>
-                  <div className="flex items-center gap-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
-                    <span className="flex items-center gap-1"><Calendar size={12} /> {draft.updated}</span>
-                    <span className="flex items-center gap-1"><Zap size={12} /> {draft.category}</span>
-                  </div>
+              {articleDrafts.length === 0 ? (
+                <div className="material-card p-8 flex flex-col items-center justify-center text-on-surface-variant">
+                  <FileText size={48} className="mb-2 opacity-20" />
+                  <p className="text-xs font-black uppercase tracking-widest opacity-40">暂无文章草稿</p>
                 </div>
-              ))}
+              ) : (
+                articleDrafts.slice(0, 4).map(draft => (
+                  <div 
+                    key={draft.id} 
+                    className="material-card p-5 group cursor-pointer hover:bg-primary/5 transition-colors border-l-4 border-l-primary" 
+                    onClick={() => onArticleDraftClick()}
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <h4 className="font-bold text-on-surface group-hover:text-primary transition-colors">{draft.title}</h4>
+                      <span className="text-[9px] font-black px-2 py-1 bg-primary-container text-on-primary-container rounded-full uppercase tracking-widest">草稿</span>
+                    </div>
+                    <div className="flex items-center gap-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+                      <span className="flex items-center gap-1"><Calendar size={12} /> {draft.updated}</span>
+                      <span className="flex items-center gap-1"><Zap size={12} /> {draft.category}</span>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </section>
 
@@ -167,17 +182,28 @@ export function DashboardView(){
             </div>
             
             <div className="space-y-4">
-              {diaryDrafts.map(draft => (
-                <div key={draft.id} className="material-card p-5 group cursor-pointer hover:bg-secondary/5 transition-colors border-l-4 border-l-secondary">
-                  <p className="text-sm text-on-surface-variant line-clamp-2 mb-3 leading-relaxed">
-                    {draft.title}
-                  </p>
-                  <div className="flex items-center gap-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
-                    <span className="flex items-center gap-1"><Clock size={12} /> {draft.updated}</span>
-                    <span className="flex items-center gap-1"><Zap size={12} /> 心情: {draft.mood}</span>
-                  </div>
+              {diaryDrafts.length === 0 ? (
+                <div className="material-card p-8 flex flex-col items-center justify-center text-on-surface-variant">
+                  <BookOpen size={48} className="mb-2 opacity-20" />
+                  <p className="text-xs font-black uppercase tracking-widest opacity-40">暂无日记草稿</p>
                 </div>
-              ))}
+              ) : (
+                diaryDrafts.slice(0, 4).map(draft => (
+                  <div 
+                    key={draft.id} 
+                    className="material-card p-5 group cursor-pointer hover:bg-secondary/5 transition-colors border-l-4 border-l-secondary"
+                    onClick={onDiaryDraftClick}
+                  >
+                    <p className="text-sm text-on-surface-variant line-clamp-2 mb-3 leading-relaxed">
+                      {draft.title}
+                    </p>
+                    <div className="flex items-center gap-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+                      <span className="flex items-center gap-1"><Clock size={12} /> {draft.updated}</span>
+                      <span className="flex items-center gap-1"><Zap size={12} /> 心情: {draft.mood}</span>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </section>
         </div>

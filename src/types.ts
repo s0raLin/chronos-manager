@@ -86,11 +86,11 @@ export interface DraftItem {
 export interface DraftsRes {
   posts: {
     count: number,
-    items: DraftItem,
+    items: DraftItem[],
   },
   diary: {
     count: number,
-    items: DraftItem,
+    items: DraftItem[],
   },
 }
 
