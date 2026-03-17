@@ -105,19 +105,20 @@ export interface DraftsRes {
 }
 
 export interface Post {
-  id: string;
+  id?: string;
   title: string;
   published?: string;
-  updated: string;
+  updated?: string;
   description: string; 
   image: string; // 图片路径
   tags: string[]; // 标签
+  body: string;
   category: string; // 分类
   draft: boolean; // 草稿箱
   pinned: boolean; //固定
   comment: boolean; // 评论
   lang: string;
-  priority: number;
+  priority?: number;
 }
 
 export interface PostRes {

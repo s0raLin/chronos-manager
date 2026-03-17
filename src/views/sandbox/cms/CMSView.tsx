@@ -17,7 +17,8 @@ import {
 } from "lucide-react";
 
 import { Post } from "@/src/types";
-import { getPosts } from "@/src/service/cms/CMSService";
+import { addPost, updatePost, getPosts } from "@/src/service/cms/CMSService";
+import { body } from "motion/react-client";
 
 export function CMSView() {
   const [mode, setMode] = useState<"list" | "edit" | "add">("list");
@@ -35,6 +36,19 @@ export function CMSView() {
   const [isPinned, setIsPinned] = useState(false);
   const [isCommentEnabled, setIsCommentEnabled] = useState(true);
   const [lang, setLang] = useState("zh-CN");
+  const [post, setPost] = useState<Post>({
+    title: "",
+    published: "",
+    description: "",
+    image: "",
+    tags: [],
+    category: "",
+    draft: false,
+    pinned: false,
+    comment: true,
+    lang: "zh-CN",
+    body: "",
+  });
 
   const [newTag, setNewTag] = useState("");
   const [customCategory, setCustomCategory] = useState("");
@@ -69,7 +83,70 @@ export function CMSView() {
     setTags(tags.filter((t) => t !== tagToRemove));
   };
 
-  function handleSave() {}
+  function clear() {
+    setTitle("");
+    setPublished("");
+    setDescription("");
+    setImage("");
+    setTags([]);
+    setCategory("");
+    setIsDraft(false);
+    setIsPinned(false);
+    setIsCommentEnabled(true);
+    setLang("");
+    setContent("");
+  }
+
+  function handleAdd() {
+    setMode("add");
+    clear();
+  }
+
+  function handleEdit(article: Post) {
+    setMode("edit");
+    setPost(article);
+    setTitle(article.title);
+    setPublished(article.published || "");
+    setDescription(article.description || "");
+    setImage(article.image || "");
+    setTags(article.tags || []);
+    setCategory(article.category || "");
+    setIsDraft(article.draft);
+    setIsPinned(article.pinned);
+    setIsCommentEnabled(article.comment);
+    setLang(article.lang);
+    setContent(article.body || "");
+  }
+  async function handleSave() {
+    const postData = {
+      id: mode === "edit" ? post.id : undefined,
+      title,
+      published: published || "",
+      description: description || "",
+      image: image || "",
+      tags: tags || [],
+      category: category || "",
+      draft: isDraft ?? false,
+      pinned: isPinned ?? false,
+      comment: isCommentEnabled ?? true,
+      lang: lang || "zh-CN",
+      body: content,
+      updated: new Date().toISOString(),
+    };
+
+    try {
+      if (mode === "edit" && postData.id) {
+        await updatePost(postData);
+      } else {
+        await addPost(postData);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setMode("list");
+    }
+  }
+
   if (mode === "list") {
     return (
       <div className="flex-1 overflow-y-auto p-8 lg:px-24">
@@ -83,10 +160,7 @@ export function CMSView() {
                 管理您的所有博文内容
               </p>
             </div>
-            <button
-              onClick={() => setMode("add")}
-              className="btn-primary shadow-xl"
-            >
+            <button onClick={handleAdd} className="btn-primary shadow-xl">
               <Plus size={18} />
               <span>新增文章</span>
             </button>
@@ -155,14 +229,15 @@ export function CMSView() {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex flex-wrap gap-1">
-                          {article.tags && article.tags.slice(0, 3).map((tag) => (
-                            <span
-                              key={tag}
-                              className="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-black rounded-full uppercase tracking-widest"
-                            >
-                              {tag}
-                            </span>
-                          ))}
+                          {article.tags &&
+                            article.tags.slice(0, 3).map((tag) => (
+                              <span
+                                key={tag}
+                                className="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-black rounded-full uppercase tracking-widest"
+                              >
+                                {tag}
+                              </span>
+                            ))}
                           {article.tags && article.tags.length > 3 && (
                             <span className="px-2 py-0.5 text-slate-400 text-[10px] font-black">
                               +{article.tags.length - 3}
@@ -187,7 +262,7 @@ export function CMSView() {
                       <td className="px-6 py-4 text-right">
                         <div className="flex justify-end gap-2">
                           <button
-                            onClick={() => setMode("edit")}
+                            onClick={() => handleEdit(article)}
                             className="p-2 hover:bg-primary/10 rounded-lg text-primary transition-colors"
                           >
                             <Edit3 size={16} />
@@ -370,7 +445,7 @@ export function CMSView() {
                   placeholder="在此输入 Markdown 内容..."
                 />
                 <div className="absolute bottom-4 right-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                  {content.length} 字符
+                  {content?.length ?? 0} 字符
                 </div>
               </div>
             </section>
