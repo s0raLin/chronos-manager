@@ -1,17 +1,27 @@
-import { BookOpen, Calendar, ImageIcon, LayoutDashboard, LucideIcon, MessageSquare, PenTool, Tag, Users } from "lucide-react";
+import {
+  BookOpen,
+  Calendar,
+  ImageIcon,
+  LayoutDashboard,
+  LucideIcon,
+  MessageSquare,
+  PenTool,
+  Tag,
+  Users,
+} from "lucide-react";
 
-export type ViewType = 
-  | 'dashboard'
-  | 'cms' 
-  | 'diary' 
-  | 'albums'
-  | 'timeline' 
-  | 'projects' 
-  | 'skills' 
-  | 'friends' 
-  | 'equipment' 
-  | 'about'
-  | 'drafts';
+export type ViewType =
+  | "dashboard"
+  | "cms"
+  | "diary"
+  | "albums"
+  | "timeline"
+  | "projects"
+  | "skills"
+  | "friends"
+  | "equipment"
+  | "about"
+  | "drafts";
 
 export interface TimelineEvent {
   id: string;
@@ -30,7 +40,7 @@ export interface DiaryEntry {
   content: string;
   date: string;
   time: string;
-  mood: 'very_dissatisfied' | 'dissatisfied' | 'satisfied' | 'very_satisfied';
+  mood: "very_dissatisfied" | "dissatisfied" | "satisfied" | "very_satisfied";
   location: string;
   tags: string[];
   attachments: string[];
@@ -46,26 +56,25 @@ export interface RouteConfig {
   subtitle: string;
   icon: LucideIcon;
   selectedIcon: LucideIcon;
-  group: 'main' | 'secondary';
+  group: "main" | "secondary";
 }
 
-
 interface NameCount {
-  name: string,
-  count: number,
+  name: string;
+  count: number;
 }
 
 export interface StatsRes {
-  postCount: string,
-  categoryCount: string,
-  categories: NameCount[],
-  tagCount: string,
-  tags: NameCount[],
-  totalWords: string,
-  runningDays: string,
-  siteStartDate: string,
-  lastActivity: string,
-  lastActivityDaysAgo: string
+  postCount: string;
+  categoryCount: string;
+  categories: NameCount[];
+  tagCount: string;
+  tags: NameCount[];
+  totalWords: string;
+  runningDays: string;
+  siteStartDate: string;
+  lastActivity: string;
+  lastActivityDaysAgo: string;
 }
 
 export interface DraftItem {
@@ -74,84 +83,66 @@ export interface DraftItem {
   title: string;
   created: string;
   updated: string;
-  category?: string;  // 文章特有
-  mood?: string;      // 日记特有
-  tags: string[];       // JSON 字符串
-  description?: string, 
+  category?: string; // 文章特有
+  mood?: string; // 日记特有
+  tags: string[]; // JSON 字符串
+  description?: string;
   body: string;
   wordCount: number;
   createdAt: string;
   updatedAt: string;
 }
 
-
-
 export interface DraftsRes {
   posts: {
-    count: number,
-    items: DraftItem[],
-  },
+    count: number;
+    items: DraftItem[];
+  };
   diary: {
-    count: number,
-    items: DraftItem[],
-  },
+    count: number;
+    items: DraftItem[];
+  };
 }
 
-// }{
-//   "postCount": 19,
-//   "categoryCount": 3,
-//   "categories": [
-//     {
-//       "name": "编程语言",
-//       "count": 14
-//     },
-//     {
-//       "name": "教程",
-//       "count": 1
-//     },
-//     {
-//       "name": "提示词工程",
-//       "coun t": 4
-//     }
-//   ],
-//   "tagCount": 8,
-//   "tags": [
-//     {
-//       "name": "欢迎",
-//       "count": 1
-//     },
-//     {
-//       "name": "基础",
-//       "count": 5
-//     },
-//     {
-//       "name": "教程",
-//       "count": 1
-//     },
-//     {
-//       "name": "提示词",
-//       "count": 4
-//     },
-//     {
-//       "name": "演示",
-//       "count": 1
-//     },
-//     {
-//       "name": "语法",
-//       "count": 1
-//     },
-//     {
-//       "name": "AI",
-//       "count": 4
-//     },
-//     {
-//       "name": "TypeScript",
-//       "count": 14
-//     }
-//   ],
-//   "totalWords": 31604,
-//   "runningDays": 12,
-//   "siteStartDate": "2026-03-04",
-//   "lastActivity": "2026-03-06T00:00:00.000Z",
-//   "lastActivityDaysAgo": 9
-// }
+export interface Post {
+  id: string;
+  title: string;
+  published?: string;
+  updated: string;
+  description: string; 
+  image: string; // 图片路径
+  tags: string[]; // 标签
+  category: string; // 分类
+  draft: boolean; // 草稿箱
+  pinned: boolean; //固定
+  comment: boolean; // 评论
+  lang: string;
+  priority: number;
+}
+
+export interface PostRes {
+  success: boolean,
+  count: number,
+  items: Post[],
+}
+// { id: 1, title: '数学理论', date: '2026-03-04', category: '教程', status: '已发布', pinned: true },
+// "title",
+// "published",
+// "updated",
+// "description",
+// "image",
+// "tags",
+// "category",
+// "draft",
+// "pinned",
+// "comment",
+// "lang",
+// "priority",
+// "author",
+// "sourceLink",
+// "licenseName",
+// "licenseUrl",
+// "encrypted",
+// "password",
+// "alias",
+// "permalink",
