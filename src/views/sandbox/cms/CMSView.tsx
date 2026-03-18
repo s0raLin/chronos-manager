@@ -17,26 +17,26 @@ import {
 } from "lucide-react";
 
 import { Post } from "@/src/types";
-import { addPost, updatePost, getPosts } from "@/src/service/cms/CMSService";
-import { body } from "motion/react-client";
+import { addPost, updatePost, getPosts, delPost } from "@/src/service/cms/CMSService";
 
 export function CMSView() {
   const [mode, setMode] = useState<"list" | "edit" | "add">("list");
   const [isPreview, setIsPreview] = useState(false);
-  const [content, setContent] = useState("");
+  // const [content, setContent] = useState("");
 
   // Metadata states
-  const [title, setTitle] = useState("");
-  const [published, setPublished] = useState("");
-  const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
-  const [tags, setTags] = useState([]);
-  const [category, setCategory] = useState("");
-  const [isDraft, setIsDraft] = useState(false);
-  const [isPinned, setIsPinned] = useState(false);
-  const [isCommentEnabled, setIsCommentEnabled] = useState(true);
+  // const [title, setTitle] = useState("");
+  // const [published, setPublished] = useState("");
+  // const [description, setDescription] = useState("");
+  // const [image, setImage] = useState("");
+  // const [tags, setTags] = useState([]);
+  // const [category, setCategory] = useState("");
+  // const [post.draft, setpost.draft] = useState(false);
+  // const [post.pinned, setpost.pinned] = useState(false);
+  // const [post.comment, setpost.comment] = useState(true);
   const [lang, setLang] = useState("zh-CN");
   const [post, setPost] = useState<Post>({
+    id: "",
     title: "",
     published: "",
     description: "",
@@ -56,45 +56,67 @@ export function CMSView() {
   const [articles, setArticles] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchArticles = async () => {
-      try {
-        setLoading(true);
-        const result = await getPosts();
-        setArticles(result.items);
-      } catch (err) {
-        console.log(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchArticles = async () => {
+    try {
+      setLoading(true);
+      const result = await getPosts();
+      setArticles(result.items);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchArticles();
   }, []);
 
   const addTag = () => {
-    if (newTag && !tags.includes(newTag)) {
-      setTags([...tags, newTag]);
+    if (newTag && !post.tags.includes(newTag)) {
+      // setTags([...tags, newTag]);
+      setPost({
+        ...post,
+        tags: [...post.tags, newTag]
+      })
       setNewTag("");
     }
   };
 
   const removeTag = (tagToRemove: string) => {
-    setTags(tags.filter((t) => t !== tagToRemove));
+    // setTags(tags.filter((t) => t !== tagToRemove));
+    setPost({
+      ...post,
+      tags: post.tags.filter((t) => t !== tagToRemove)
+    })
   };
 
   function clear() {
-    setTitle("");
-    setPublished("");
-    setDescription("");
-    setImage("");
-    setTags([]);
-    setCategory("");
-    setIsDraft(false);
-    setIsPinned(false);
-    setIsCommentEnabled(true);
-    setLang("");
-    setContent("");
+    // setTitle("");
+    // setPublished("");
+    // setDescription("");
+    // setImage("");
+    // setTags([]);
+    // setCategory("");
+    // setpost.draft(false);
+    // setpost.pinned(false);
+    // setpost.comment(true);
+    // setLang("");
+    // setContent("");
+    setPost({
+      id: "",
+      title: "",
+      published: "",
+      description: "",
+      image: "",
+      tags: [],
+      category: "",
+      draft: false,
+      pinned: false,
+      comment: true,
+      lang: "zh-CN",
+      body: "",
+    });
   }
 
   function handleAdd() {
@@ -105,32 +127,32 @@ export function CMSView() {
   function handleEdit(article: Post) {
     setMode("edit");
     setPost(article);
-    setTitle(article.title);
-    setPublished(article.published || "");
-    setDescription(article.description || "");
-    setImage(article.image || "");
-    setTags(article.tags || []);
-    setCategory(article.category || "");
-    setIsDraft(article.draft);
-    setIsPinned(article.pinned);
-    setIsCommentEnabled(article.comment);
-    setLang(article.lang);
-    setContent(article.body || "");
+    // setTitle(article.title);
+    // setPublished(article.published || "");
+    // setDescription(article.description || "");
+    // setImage(article.image || "");
+    // setTags(article.tags || []);
+    // setCategory(article.category || "");
+    // setpost.draft(article.draft);
+    // setpost.pinned(article.pinned);
+    // setpost.comment(article.comment);
+    // setLang(article.lang);
+    // setContent(article.body || "");
   }
   async function handleSave() {
     const postData = {
       id: mode === "edit" ? post.id : undefined,
-      title,
-      published: published || "",
-      description: description || "",
-      image: image || "",
-      tags: tags || [],
-      category: category || "",
-      draft: isDraft ?? false,
-      pinned: isPinned ?? false,
-      comment: isCommentEnabled ?? true,
+      title: post.title,
+      published: post.published || "",
+      description: post.description || "",
+      image: post.image || "",
+      tags: post.tags || [],
+      category: post.category || "",
+      draft: post.draft ?? false,
+      pinned: post.pinned ?? false,
+      comment: post.comment ?? true,
       lang: lang || "zh-CN",
-      body: content,
+      body: post.body,
       updated: new Date().toISOString(),
     };
 
@@ -140,16 +162,30 @@ export function CMSView() {
       } else {
         await addPost(postData);
       }
+      // 保存成功后刷新列表
+      await fetchArticles();
+      setMode("list");
     } catch (error) {
       console.log(error);
-    } finally {
-      setMode("list");
     }
   }
 
+  async function handleDel(id: string) {
+    const confirmed = window.confirm("确定要删除这篇文章吗？此操作不可撤销。");
+    if (!confirmed) return;
+    
+    try {
+      await delPost(id);
+      await fetchArticles();
+    } catch(error) {
+      console.log(error);
+    }
+  }
+
+
   if (mode === "list") {
     return (
-      <div className="flex-1 overflow-y-auto p-8 lg:px-24">
+      <div className="flex-1 overflow-y-scroll scrollbar-visible p-8 lg:px-24">
         <div className="max-w-6xl mx-auto space-y-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
@@ -223,24 +259,37 @@ export function CMSView() {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-500 text-[10px] font-black rounded-full uppercase tracking-widest">
-                          {article.category}
-                        </span>
+                        {article.category ? (
+                          <span className="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-500 text-[10px] font-black rounded-full uppercase tracking-widest">
+                            {article.category}
+                          </span>
+                        ) : (
+                          <span className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black rounded-full uppercase tracking-widest">
+                            未分类
+                          </span>
+                        )}
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex flex-wrap gap-1">
-                          {article.tags &&
-                            article.tags.slice(0, 3).map((tag) => (
-                              <span
-                                key={tag}
-                                className="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-black rounded-full uppercase tracking-widest"
-                              >
-                                {tag}
-                              </span>
-                            ))}
-                          {article.tags && article.tags.length > 3 && (
-                            <span className="px-2 py-0.5 text-slate-400 text-[10px] font-black">
-                              +{article.tags.length - 3}
+                          {article.tags && article.tags.length > 0 ? (
+                            <>
+                              {article.tags.slice(0, 3).map((tag) => (
+                                <span
+                                  key={tag}
+                                  className="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-black rounded-full uppercase tracking-widest"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                              {article.tags.length > 3 && (
+                                <span className="px-2 py-0.5 text-slate-400 text-[10px] font-black">
+                                  +{article.tags.length - 3}
+                                </span>
+                              )}
+                            </>
+                          ) : (
+                            <span className="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-black rounded-full uppercase tracking-widest">
+                              暂无标签
                             </span>
                           )}
                         </div>
@@ -267,7 +316,10 @@ export function CMSView() {
                           >
                             <Edit3 size={16} />
                           </button>
-                          <button className="p-2 hover:bg-red-50 rounded-lg text-red-500 transition-colors">
+                          <button 
+                            onClick={()=>handleDel(article.id)}
+                            className="p-2 hover:bg-red-50 rounded-lg text-red-500 transition-colors"
+                          >
                             <Trash2 size={16} />
                           </button>
                         </div>
@@ -284,7 +336,7 @@ export function CMSView() {
   }
 
   return (
-    <div className="flex-1 overflow-y-auto p-8">
+    <div className="flex-1 overflow-y-scroll scrollbar-visible p-8">
       <div className="max-w-6xl mx-auto space-y-8">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <button
@@ -327,8 +379,8 @@ export function CMSView() {
                   </label>
                   <input
                     className="w-full bg-primary/5 border-none rounded-xl p-4 text-xl font-bold focus:ring-2 focus:ring-primary/40 focus:bg-primary/10 transition-all outline-none"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    value={post.title}
+                    onChange={(e) => setPost({ ...post, title: e.target.value })}
                     placeholder="请输入文章标题..."
                     type="text"
                   />
@@ -343,8 +395,8 @@ export function CMSView() {
                       <input
                         className="w-full bg-primary/5 border-none rounded-xl p-4 focus:ring-2 focus:ring-primary/40 outline-none font-bold"
                         type="date"
-                        value={published}
-                        onChange={(e) => setPublished(e.target.value)}
+                        value={post.published}
+                        onChange={(e) => setPost({ ...post, published: e.target.value })}
                       />
                       <Calendar
                         size={18}
@@ -359,8 +411,8 @@ export function CMSView() {
                     <div className="relative">
                       <select
                         className="w-full bg-primary/5 border-none rounded-xl p-4 focus:ring-2 focus:ring-primary/40 outline-none appearance-none font-bold"
-                        value={lang}
-                        onChange={(e) => setLang(e.target.value)}
+                        value={post.lang}
+                        onChange={(e) => setPost({ ...post, lang: e.target.value })}
                       >
                         <option value="zh-CN">简体中文 (zh-CN)</option>
                         <option value="en-US">English (en-US)</option>
@@ -381,8 +433,8 @@ export function CMSView() {
                   <div className="flex gap-2">
                     <input
                       className="flex-1 bg-primary/5 border-none rounded-xl p-4 focus:ring-2 focus:ring-primary/40 outline-none font-bold"
-                      value={image}
-                      onChange={(e) => setImage(e.target.value)}
+                      value={post.image}
+                      onChange={(e) => setPost({ ...post, image: e.target.value })}
                       placeholder="./cover.webp"
                     />
                     <button className="p-4 bg-primary/10 text-primary rounded-xl hover:bg-primary/20 transition-colors">
@@ -395,8 +447,8 @@ export function CMSView() {
                   <label className="form-label">文章描述 (description)</label>
                   <textarea
                     className="form-textarea"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
+                    value={post.description}
+                    onChange={(e) => setPost({ ...post, description: e.target.value })}
                     placeholder="简短的文章总结..."
                   />
                 </div>
@@ -440,12 +492,12 @@ export function CMSView() {
               <div className="relative">
                 <textarea
                   className="w-full bg-primary/5 border-none rounded-xl p-6 focus:ring-2 focus:ring-primary/40 outline-none min-h-[500px] font-mono text-sm leading-relaxed"
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
+                  value={post.body}
+                  onChange={(e) => setPost({ ...post, body: e.target.value })}
                   placeholder="在此输入 Markdown 内容..."
                 />
                 <div className="absolute bottom-4 right-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                  {content?.length ?? 0} 字符
+                  {post.body?.length ?? 0} 字符
                 </div>
               </div>
             </section>
@@ -466,15 +518,15 @@ export function CMSView() {
                   <div className="space-y-2">
                     <select
                       className="w-full bg-primary/5 border-none rounded-xl p-3 focus:ring-2 focus:ring-primary/40 outline-none appearance-none font-bold text-sm"
-                      value={category}
-                      onChange={(e) => setCategory(e.target.value)}
+                      value={post.category}
+                      onChange={(e) => setPost({ ...post, category: e.target.value })}
                     >
                       <option value="教程">教程</option>
                       <option value="随笔">随笔</option>
                       <option value="技术">技术</option>
                       <option value="custom">-- 自定义 --</option>
                     </select>
-                    {category === "custom" && (
+                    {post.category === "custom" && (
                       <input
                         className="w-full bg-primary/5 border-none rounded-xl p-3 focus:ring-2 focus:ring-primary/40 outline-none font-bold text-sm"
                         placeholder="输入自定义分类..."
@@ -490,7 +542,7 @@ export function CMSView() {
                     标签 (tags)
                   </label>
                   <div className="flex flex-wrap gap-2 mb-3">
-                    {tags.map((tag) => (
+                    {post.tags.map((tag) => (
                       <span
                         key={tag}
                         className="px-3 py-1.5 bg-primary/10 text-primary text-[9px] font-black rounded-full uppercase tracking-wider flex items-center gap-1"
@@ -533,28 +585,28 @@ export function CMSView() {
                 <label className="flex items-center justify-between cursor-pointer group">
                   <div className="flex items-center gap-3">
                     <div
-                      className={`size-10 rounded-xl flex items-center justify-center transition-colors ${isDraft ? "bg-amber-100 text-amber-600" : "bg-green-100 text-green-600"}`}
+                      className={`size-10 rounded-xl flex items-center justify-center transition-colors ${post.draft ? "bg-amber-100 text-amber-600" : "bg-green-100 text-green-600"}`}
                     >
                       <FileText size={20} />
                     </div>
                     <div>
                       <p className="text-sm font-bold">草稿模式 (draft)</p>
                       <p className="text-[10px] text-slate-400 font-medium uppercase tracking-widest">
-                        {isDraft ? "仅自己可见" : "公开发布"}
+                        {post.draft ? "仅自己可见" : "公开发布"}
                       </p>
                     </div>
                   </div>
                   <input
                     type="checkbox"
                     className="hidden"
-                    checked={isDraft}
-                    onChange={() => setIsDraft(!isDraft)}
+                    checked={post.draft}
+                    onChange={() => setPost({ ...post, draft: !post.draft })}
                   />
                   <div
-                    className={`w-12 h-6 rounded-full relative transition-colors ${isDraft ? "bg-amber-500" : "bg-slate-200"}`}
+                    className={`w-12 h-6 rounded-full relative transition-colors ${post.draft ? "bg-amber-500" : "bg-slate-200"}`}
                   >
                     <div
-                      className={`absolute top-1 size-4 bg-white rounded-full transition-all ${isDraft ? "left-7" : "left-1"}`}
+                      className={`absolute top-1 size-4 bg-white rounded-full transition-all ${post.draft ? "left-7" : "left-1"}`}
                     />
                   </div>
                 </label>
@@ -562,28 +614,28 @@ export function CMSView() {
                 <label className="flex items-center justify-between cursor-pointer group">
                   <div className="flex items-center gap-3">
                     <div
-                      className={`size-10 rounded-xl flex items-center justify-center transition-colors ${isPinned ? "bg-primary/20 text-primary" : "bg-slate-100 text-slate-400"}`}
+                      className={`size-10 rounded-xl flex items-center justify-center transition-colors ${post.pinned ? "bg-primary/20 text-primary" : "bg-slate-100 text-slate-400"}`}
                     >
                       <Pin size={20} />
                     </div>
                     <div>
                       <p className="text-sm font-bold">置顶文章 (pinned)</p>
                       <p className="text-[10px] text-slate-400 font-medium uppercase tracking-widest">
-                        {isPinned ? "已置顶" : "普通排序"}
+                        {post.pinned ? "已置顶" : "普通排序"}
                       </p>
                     </div>
                   </div>
                   <input
                     type="checkbox"
                     className="hidden"
-                    checked={isPinned}
-                    onChange={() => setIsPinned(!isPinned)}
+                    checked={post.pinned}
+                    onChange={() => setPost({ ...post, pinned: !post.pinned })}
                   />
                   <div
-                    className={`w-12 h-6 rounded-full relative transition-colors ${isPinned ? "bg-primary" : "bg-slate-200"}`}
+                    className={`w-12 h-6 rounded-full relative transition-colors ${post.pinned ? "bg-primary" : "bg-slate-200"}`}
                   >
                     <div
-                      className={`absolute top-1 size-4 bg-white rounded-full transition-all ${isPinned ? "left-7" : "left-1"}`}
+                      className={`absolute top-1 size-4 bg-white rounded-full transition-all ${post.pinned ? "left-7" : "left-1"}`}
                     />
                   </div>
                 </label>
@@ -591,28 +643,28 @@ export function CMSView() {
                 <label className="flex items-center justify-between cursor-pointer group">
                   <div className="flex items-center gap-3">
                     <div
-                      className={`size-10 rounded-xl flex items-center justify-center transition-colors ${isCommentEnabled ? "bg-primary/20 text-primary" : "bg-slate-100 text-slate-400"}`}
+                      className={`size-10 rounded-xl flex items-center justify-center transition-colors ${post.comment ? "bg-primary/20 text-primary" : "bg-slate-100 text-slate-400"}`}
                     >
                       <MessageSquare size={20} />
                     </div>
                     <div>
                       <p className="text-sm font-bold">开启评论 (comment)</p>
                       <p className="text-[10px] text-slate-400 font-medium uppercase tracking-widest">
-                        {isCommentEnabled ? "允许评论" : "禁止评论"}
+                        {post.comment ? "允许评论" : "禁止评论"}
                       </p>
                     </div>
                   </div>
                   <input
                     type="checkbox"
                     className="hidden"
-                    checked={isCommentEnabled}
-                    onChange={() => setIsCommentEnabled(!isCommentEnabled)}
+                    checked={post.comment}
+                    onChange={() => setPost({ ...post, comment: !post.comment })}
                   />
                   <div
-                    className={`w-12 h-6 rounded-full relative transition-colors ${isCommentEnabled ? "bg-primary" : "bg-slate-200"}`}
+                    className={`w-12 h-6 rounded-full relative transition-colors ${post.comment ? "bg-primary" : "bg-slate-200"}`}
                   >
                     <div
-                      className={`absolute top-1 size-4 bg-white rounded-full transition-all ${isCommentEnabled ? "left-7" : "left-1"}`}
+                      className={`absolute top-1 size-4 bg-white rounded-full transition-all ${post.comment ? "left-7" : "left-1"}`}
                     />
                   </div>
                 </label>
@@ -639,9 +691,9 @@ export function CMSView() {
                   <div className="mb-8 space-y-4">
                     <div className="flex flex-wrap gap-2">
                       <span className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black rounded-full uppercase tracking-widest">
-                        {category === "custom" ? customCategory : category}
+                        {post.category === "custom" ? customCategory : post.category}
                       </span>
-                      {tags.map((tag) => (
+                      {post.tags.map((tag) => (
                         <span
                           key={tag}
                           className="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-500 text-[10px] font-black rounded-full uppercase tracking-widest"
@@ -651,13 +703,13 @@ export function CMSView() {
                       ))}
                     </div>
                     <h1 className="text-5xl font-black text-slate-800 dark:text-slate-100 leading-[1.1] tracking-tighter">
-                      {title}
+                      {post.title}
                     </h1>
                     <div className="flex items-center gap-4 text-slate-400 text-xs font-bold uppercase tracking-widest">
-                      <span>{published}</span>
+                      <span>{post.published}</span>
                       <span>•</span>
                       <span>{lang}</span>
-                      {isPinned && (
+                      {post.pinned && (
                         <span className="text-primary flex items-center gap-1">
                           <Pin size={12} /> 已置顶
                         </span>
@@ -669,9 +721,9 @@ export function CMSView() {
                     <img
                       className="w-full h-full object-cover"
                       src={
-                        image.startsWith(".")
-                          ? `https://picsum.photos/seed/${title}/1200/675`
-                          : image
+                        post.image.startsWith(".")
+                          ? `https://picsum.photos/seed/${post.title}/1200/675`
+                          : post.image
                       }
                       alt="Cover"
                       referrerPolicy="no-referrer"
@@ -680,10 +732,10 @@ export function CMSView() {
 
                   <div className="prose prose-slate dark:prose-invert max-w-none">
                     <p className="text-xl text-slate-500 dark:text-slate-400 italic mb-12 border-l-4 border-primary/30 pl-6 py-2 leading-relaxed">
-                      {description}
+                      {post.description}
                     </p>
                     <div className="whitespace-pre-wrap font-sans leading-relaxed text-slate-700 dark:text-slate-300">
-                      {content || "开始编写您的精彩内容..."}
+                      {post.body || "开始编写您的精彩内容..."}
                     </div>
                   </div>
                 </div>

@@ -14,8 +14,6 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
-      port: 3000, // 开发服务器端口，可改
-      open: true, // 启动自动打开浏览器
       proxy: {
         // 代理所有 /api 请求到 JSON 服务器
         "/api": {

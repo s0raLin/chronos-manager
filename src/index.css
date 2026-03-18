@@ -126,4 +126,43 @@
   .form-label {
     @apply text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1;
   }
+
+  /* 自定义滚动条样式 - 确保滚动条始终可见 */
+  .scrollbar-visible {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
+  }
+
+  .scrollbar-visible::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scrollbar-visible::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-visible::-webkit-scrollbar-thumb {
+    background-color: rgba(155, 155, 155, 0.5);
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+
+  .scrollbar-visible::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(155, 155, 155, 0.7);
+  }
+
+  /* 深色模式滚动条 */
+  .dark .scrollbar-visible {
+    scrollbar-color: rgba(155, 155, 155, 0.3) transparent;
+  }
+
+  .dark .scrollbar-visible::-webkit-scrollbar-thumb {
+    background-color: rgba(155, 155, 155, 0.3);
+  }
+
+  .dark .scrollbar-visible::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(155, 155, 155, 0.5);
+  }
 }

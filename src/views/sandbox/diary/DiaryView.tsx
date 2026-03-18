@@ -66,7 +66,7 @@ export function DiaryView(){
 
   if (mode === 'list') {
     return (
-      <div className="flex-1 overflow-y-auto p-8 lg:px-24">
+      <div className="flex-1 overflow-y-scroll scrollbar-visible p-8 lg:px-24">
         <div className="max-w-6xl mx-auto space-y-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
@@ -120,11 +120,17 @@ export function DiaryView(){
                   </p>
 
                   <div className="flex flex-wrap gap-2">
-                    {diary.tags.map(tag => (
-                      <span key={tag} className="px-2 py-1 bg-primary/5 text-primary text-[9px] font-black rounded-full uppercase tracking-widest">
-                        #{tag}
+                    {diary.tags && diary.tags.length > 0 ? (
+                      diary.tags.map(tag => (
+                        <span key={tag} className="px-2 py-1 bg-primary/5 text-primary text-[9px] font-black rounded-full uppercase tracking-widest">
+                          #{tag}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="px-2 py-1 bg-primary/10 text-primary text-[9px] font-black rounded-full uppercase tracking-widest">
+                        暂无标签
                       </span>
-                    ))}
+                    )}
                   </div>
                 </div>
               );
@@ -136,7 +142,7 @@ export function DiaryView(){
   }
 
   return (
-    <div className="flex-1 overflow-y-auto p-8 lg:px-24">
+    <div className="flex-1 overflow-y-scroll scrollbar-visible p-8 lg:px-24">
       <div className="max-w-4xl mx-auto space-y-8">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <button 
