@@ -17,10 +17,18 @@ import {
 } from "lucide-react";
 
 import { Post } from "@/src/types";
-import { addPost, updatePost, getPosts, delPost } from "@/src/service/cms/CMSService";
+import {
+  addPost,
+  updatePost,
+  getPosts,
+  delPost,
+} from "@/src/service/cms/CMSService";
+import { useSearchParams } from "react-router-dom";
 
 export function CMSView() {
-  const [mode, setMode] = useState<"list" | "edit" | "add">("list");
+  const [searchParams] = useSearchParams();
+  const newMode = searchParams.get("mode") ?? "list";
+  const [mode, setMode] = useState<"list" | "edit" | "add">(newMode);
   const [isPreview, setIsPreview] = useState(false);
   // const [content, setContent] = useState("");
 
@@ -77,8 +85,8 @@ export function CMSView() {
       // setTags([...tags, newTag]);
       setPost({
         ...post,
-        tags: [...post.tags, newTag]
-      })
+        tags: [...post.tags, newTag],
+      });
       setNewTag("");
     }
   };
@@ -87,8 +95,8 @@ export function CMSView() {
     // setTags(tags.filter((t) => t !== tagToRemove));
     setPost({
       ...post,
-      tags: post.tags.filter((t) => t !== tagToRemove)
-    })
+      tags: post.tags.filter((t) => t !== tagToRemove),
+    });
   };
 
   function clear() {
@@ -173,19 +181,18 @@ export function CMSView() {
   async function handleDel(id: string) {
     const confirmed = window.confirm("确定要删除这篇文章吗？此操作不可撤销。");
     if (!confirmed) return;
-    
+
     try {
       await delPost(id);
       await fetchArticles();
-    } catch(error) {
+    } catch (error) {
       console.log(error);
     }
   }
 
-
   if (mode === "list") {
     return (
-      <div className="flex-1 overflow-y-scroll scrollbar-visible p-8 lg:px-24">
+      <div className="flex-1 overflow-y-auto scrollbar-visible p-8 lg:px-24">
         <div className="max-w-6xl mx-auto space-y-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
@@ -230,7 +237,7 @@ export function CMSView() {
               </div>
             </div>
 
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto overflow-y-auto scrollbar-visible max-h-[60vh]">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-primary/5 text-[10px] font-black text-slate-400 uppercase tracking-widest">
@@ -316,8 +323,8 @@ export function CMSView() {
                           >
                             <Edit3 size={16} />
                           </button>
-                          <button 
-                            onClick={()=>handleDel(article.id)}
+                          <button
+                            onClick={() => handleDel(article.id)}
                             className="p-2 hover:bg-red-50 rounded-lg text-red-500 transition-colors"
                           >
                             <Trash2 size={16} />
@@ -336,7 +343,7 @@ export function CMSView() {
   }
 
   return (
-    <div className="flex-1 overflow-y-scroll scrollbar-visible p-8">
+    <div className="flex-1 overflow-y-auto scrollbar-visible p-8">
       <div className="max-w-6xl mx-auto space-y-8">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <button
@@ -380,7 +387,9 @@ export function CMSView() {
                   <input
                     className="w-full bg-primary/5 border-none rounded-xl p-4 text-xl font-bold focus:ring-2 focus:ring-primary/40 focus:bg-primary/10 transition-all outline-none"
                     value={post.title}
-                    onChange={(e) => setPost({ ...post, title: e.target.value })}
+                    onChange={(e) =>
+                      setPost({ ...post, title: e.target.value })
+                    }
                     placeholder="请输入文章标题..."
                     type="text"
                   />
@@ -396,7 +405,9 @@ export function CMSView() {
                         className="w-full bg-primary/5 border-none rounded-xl p-4 focus:ring-2 focus:ring-primary/40 outline-none font-bold"
                         type="date"
                         value={post.published}
-                        onChange={(e) => setPost({ ...post, published: e.target.value })}
+                        onChange={(e) =>
+                          setPost({ ...post, published: e.target.value })
+                        }
                       />
                       <Calendar
                         size={18}
@@ -412,7 +423,9 @@ export function CMSView() {
                       <select
                         className="w-full bg-primary/5 border-none rounded-xl p-4 focus:ring-2 focus:ring-primary/40 outline-none appearance-none font-bold"
                         value={post.lang}
-                        onChange={(e) => setPost({ ...post, lang: e.target.value })}
+                        onChange={(e) =>
+                          setPost({ ...post, lang: e.target.value })
+                        }
                       >
                         <option value="zh-CN">简体中文 (zh-CN)</option>
                         <option value="en-US">English (en-US)</option>
@@ -434,7 +447,9 @@ export function CMSView() {
                     <input
                       className="flex-1 bg-primary/5 border-none rounded-xl p-4 focus:ring-2 focus:ring-primary/40 outline-none font-bold"
                       value={post.image}
-                      onChange={(e) => setPost({ ...post, image: e.target.value })}
+                      onChange={(e) =>
+                        setPost({ ...post, image: e.target.value })
+                      }
                       placeholder="./cover.webp"
                     />
                     <button className="p-4 bg-primary/10 text-primary rounded-xl hover:bg-primary/20 transition-colors">
@@ -448,7 +463,9 @@ export function CMSView() {
                   <textarea
                     className="form-textarea"
                     value={post.description}
-                    onChange={(e) => setPost({ ...post, description: e.target.value })}
+                    onChange={(e) =>
+                      setPost({ ...post, description: e.target.value })
+                    }
                     placeholder="简短的文章总结..."
                   />
                 </div>
@@ -519,7 +536,9 @@ export function CMSView() {
                     <select
                       className="w-full bg-primary/5 border-none rounded-xl p-3 focus:ring-2 focus:ring-primary/40 outline-none appearance-none font-bold text-sm"
                       value={post.category}
-                      onChange={(e) => setPost({ ...post, category: e.target.value })}
+                      onChange={(e) =>
+                        setPost({ ...post, category: e.target.value })
+                      }
                     >
                       <option value="教程">教程</option>
                       <option value="随笔">随笔</option>
@@ -658,7 +677,9 @@ export function CMSView() {
                     type="checkbox"
                     className="hidden"
                     checked={post.comment}
-                    onChange={() => setPost({ ...post, comment: !post.comment })}
+                    onChange={() =>
+                      setPost({ ...post, comment: !post.comment })
+                    }
                   />
                   <div
                     className={`w-12 h-6 rounded-full relative transition-colors ${post.comment ? "bg-primary" : "bg-slate-200"}`}
@@ -691,7 +712,9 @@ export function CMSView() {
                   <div className="mb-8 space-y-4">
                     <div className="flex flex-wrap gap-2">
                       <span className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black rounded-full uppercase tracking-widest">
-                        {post.category === "custom" ? customCategory : post.category}
+                        {post.category === "custom"
+                          ? customCategory
+                          : post.category}
                       </span>
                       {post.tags.map((tag) => (
                         <span

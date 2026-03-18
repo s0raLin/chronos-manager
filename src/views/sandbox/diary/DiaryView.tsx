@@ -20,9 +20,12 @@ import {
   ArrowLeft,
   MoreVertical
 } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
 
 export function DiaryView(){
-  const [mode, setMode] = useState<'list' | 'edit' | 'add'>('list');
+  const [searchParams] = useSearchParams();
+  const newMode = searchParams.get("mode") ?? "list";
+  const [mode, setMode] = useState<'list' | 'edit' | 'add'>(newMode);
   const [content, setContent] = useState('');
   const [mood, setMood] = useState('satisfied');
   const [location, setLocation] = useState('上海, 中国');

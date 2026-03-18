@@ -127,10 +127,10 @@
     @apply text-[10px] font-black text-on-surface-variant uppercase tracking-widest ml-1;
   }
 
-  /* 自定义滚动条样式 - 确保滚动条始终可见 */
+  /* 自定义滚动条样式 - 确保滚动条始终可见，使用主题色 */
   .scrollbar-visible {
     scrollbar-width: thin;
-    scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
+    scrollbar-color: var(--md-sys-color-primary) transparent;
   }
 
   .scrollbar-visible::-webkit-scrollbar {
@@ -143,26 +143,30 @@
   }
 
   .scrollbar-visible::-webkit-scrollbar-thumb {
-    background-color: rgba(155, 155, 155, 0.5);
+    background-color: var(--md-sys-color-primary);
     border-radius: 4px;
     border: 2px solid transparent;
     background-clip: padding-box;
+    opacity: 0.5;
   }
 
   .scrollbar-visible::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(155, 155, 155, 0.7);
+    background-color: var(--md-sys-color-primary);
+    opacity: 0.8;
   }
 
-  /* 深色模式滚动条 */
+  /* 深色模式滚动条 - 使用主题色，更透明一些 */
   .dark .scrollbar-visible {
-    scrollbar-color: rgba(155, 155, 155, 0.3) transparent;
+    scrollbar-color: var(--md-sys-color-primary) transparent;
   }
 
   .dark .scrollbar-visible::-webkit-scrollbar-thumb {
-    background-color: rgba(155, 155, 155, 0.3);
+    background-color: var(--md-sys-color-primary);
+    opacity: 0.4;
   }
 
   .dark .scrollbar-visible::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(155, 155, 155, 0.5);
+    background-color: var(--md-sys-color-primary);
+    opacity: 0.6;
   }
 }

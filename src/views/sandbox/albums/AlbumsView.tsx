@@ -149,7 +149,7 @@ export function AlbumsView(){
 
   if (mode === 'list') {
     return (
-      <div className="flex-1 overflow-y-scroll scrollbar-visible p-8 lg:px-24">
+      <div className="flex-1 overflow-y-auto scrollbar-visible p-8 lg:px-24">
         <div className="max-w-6xl mx-auto space-y-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div>
@@ -239,7 +239,7 @@ export function AlbumsView(){
   }
 
   return (
-    <div className="flex-1 overflow-y-scroll scrollbar-visible p-8 lg:px-24">
+    <div className="flex-1 overflow-y-auto scrollbar-visible p-8 lg:px-24">
       <div className="max-w-5xl mx-auto space-y-8 pb-20">
         <div className="flex items-center justify-between">
           <button 

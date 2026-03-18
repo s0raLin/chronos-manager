@@ -212,11 +212,21 @@ export function DashboardView(){
         <section className="space-y-6">
           <h3 className="text-xl font-black tracking-tight text-on-surface">快速操作</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <button className="p-6 rounded-3xl bg-primary-container/30 border border-outline/10 flex flex-col items-center gap-3 hover:bg-primary hover:text-on-primary transition-all group">
+            <button 
+              className="p-6 rounded-3xl bg-primary-container/30 border border-outline/10 flex flex-col items-center gap-3 hover:bg-primary hover:text-on-primary transition-all group"
+              onClick={() => {
+                navigate("/cms?mode=edit");
+              }}
+            >
               <PenTool size={32} className="group-hover:scale-110 transition-transform" />
               <span className="text-xs font-black uppercase tracking-widest">写新文章</span>
             </button>
-            <button className="p-6 rounded-3xl bg-secondary-container/30 border border-outline/10 flex flex-col items-center gap-3 hover:bg-secondary hover:text-on-secondary transition-all group">
+            <button 
+              className="p-6 rounded-3xl bg-secondary-container/30 border border-outline/10 flex flex-col items-center gap-3 hover:bg-secondary hover:text-on-secondary transition-all group"
+              onClick={() => {
+                navigate("/diary?mode=edit");
+              }}
+            >
               <BookOpen size={32} className="group-hover:scale-110 transition-transform" />
               <span className="text-xs font-black uppercase tracking-widest">记日记</span>
             </button>
